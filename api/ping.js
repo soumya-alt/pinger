@@ -1,15 +1,15 @@
 const https = require('https');
 
 // The URL to ping
-const TARGET_URL = 'https://soumya-alt.github.io/portfolio/';
+const targetUrl = 'https://discord-welcome-bot-4ssw.onrender.com/';
 
 // Function to ping the URL
 async function pingUrl() {
-    console.log(`[${new Date().toISOString()}] Attempting to ping: ${TARGET_URL}`);
+    console.log(`[${new Date().toISOString()}] Attempting to ping: ${targetUrl}`);
     
     const startTime = Date.now();
     
-    https.get(TARGET_URL, (response) => {
+    https.get(targetUrl, (response) => {
         const endTime = Date.now();
         const responseTime = endTime - startTime;
         
