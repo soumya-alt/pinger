@@ -1,27 +1,37 @@
-const fetch = require('node-fetch');
+const https = require('https');
 
 // The URL to ping
-const TARGET_URL = 'https://discord-welcome-bot-4ssw.onrender.com/';
+const TARGET_URL = 'https://soumya-alt.github.io/portfolio/';
 
 // Function to ping the URL
 async function pingUrl() {
-    try {
-        const startTime = Date.now();
-        const response = await fetch(TARGET_URL, {
-            method: 'HEAD',
-            headers: {
-                'Cache-Control': 'no-cache'
-            }
-        });
+    console.log(`[${new Date().toISOString()}] Attempting to ping: ${TARGET_URL}`);
+    
+    const startTime = Date.now();
+    
+    https.get(TARGET_URL, (response) => {
         const endTime = Date.now();
         const responseTime = endTime - startTime;
         
-        console.log(`Ping successful - Response time: ${responseTime}ms`);
-        return { success: true, responseTime };
-    } catch (error) {
-        console.error(`Ping failed: ${error.message}`);
-        return { success: false, error: error.message };
-    }
+        console.log(`[${new Date().toISOString()}] Ping successful!`);
+        console.log(`Status: ${response.statusCode}`);
+        console.log(`Response time: ${responseTime}ms`);
+        
+        return {
+            success: true,
+            status: response.statusCode,
+            responseTime: `${responseTime}ms`,
+            timestamp: new Date().toISOString()
+        };
+    }).on('error', (error) => {
+        console.error(`[${new Date().toISOString()}] Ping failed:`, error.message);
+        
+        return {
+            success: false,
+            error: error.message,
+            timestamp: new Date().toISOString()
+        };
+    });
 }
 
 // Serverless function handler
