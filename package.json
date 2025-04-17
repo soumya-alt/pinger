@@ -1,0 +1,12 @@
+{
+  "name": "url-pinger",
+  "version": "1.0.0",
+  "description": "A service to ping URLs continuously",
+  "main": "api/ping.js",
+  "dependencies": {
+    "node-fetch": "^2.6.9"
+  },
+  "scripts": {
+    "start": "vercel dev"
+  }
+} 

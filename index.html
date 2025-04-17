@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Pinger</title>
+    <link rel="stylesheet" href="styles.css">
+    <meta name="description" content="A web application that pings URLs and displays logs">
+</head>
+<body>
+    <div class="container">
+        <h1>URL Pinger</h1>
+        <div class="auto-ping-notice">
+            <p>Automatically pinging: <strong>https://discord-welcome-bot-4ssw.onrender.com/</strong></p>
+            <p>Pinging will continue in the background when this tab is active.</p>
+            <p class="note">Note: Keep this tab open in your browser for continuous pinging.</p>
+        </div>
+        <div class="input-section">
+            <input type="url" id="urlInput" placeholder="Enter URL to ping (e.g., https://example.com)" required>
+            <button id="startPing">Start Pinging</button>
+            <button id="stopPing">Stop Pinging</button>
+        </div>
+        <div class="status-section">
+            <div class="status-indicator">
+                <span>Status:</span>
+                <span id="pingStatus">Not Started</span>
+            </div>
+            <div class="last-ping">
+                <span>Last Ping:</span>
+                <span id="lastPingTime">-</span>
+            </div>
+        </div>
+        <div class="logs-container">
+            <h2>Ping Logs</h2>
+            <div id="pingLogs" class="logs"></div>
+        </div>
+        
+        <!-- Debug Section -->
+        <div class="debug-section">
+            <h2>Debug Information</h2>
+            <div class="debug-controls">
+                <button id="testPing">Test Single Ping</button>
+            </div>
+            <div id="debugOutput" class="debug-output"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        // Debug function
+        document.getElementById('testPing').addEventListener('click', async () => {
+            const url = document.getElementById('urlInput').value.trim();
+            if (!url) {
+                alert('Please enter a valid URL');
+                return;
+            }
+            
+            document.getElementById('debugOutput').innerHTML += 
+                `<p>Testing ping to: ${url}</p>`;
+            
+            try {
+                const startTime = performance.now();
+                const response = await fetch(url, { 
+                    method: 'HEAD',
+                    mode: 'no-cors',
+                    cache: 'no-store'
+                });
+                const endTime = performance.now();
+                const responseTime = Math.round(endTime - startTime);
+                
+                document.getElementById('debugOutput').innerHTML += 
+                    `<p class="success">Ping successful - Response time: ${responseTime}ms</p>`;
+            } catch (error) {
+                document.getElementById('debugOutput').innerHTML += 
+                    `<p class="error">Ping failed - ${error.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html> 
