@@ -10,7 +10,7 @@ async function pingUrl() {
         
         const startTime = Date.now();
         
-        https.get(targetUrl, (response) => {
+        const req = https.get(targetUrl, (response) => {
             const endTime = Date.now();
             const responseTime = endTime - startTime;
             
@@ -24,12 +24,24 @@ async function pingUrl() {
                 responseTime: `${responseTime}ms`,
                 timestamp: new Date().toISOString()
             });
-        }).on('error', (error) => {
+        });
+
+        req.on('error', (error) => {
             console.error(`[${new Date().toISOString()}] Ping failed:`, error.message);
             
             reject({
                 success: false,
                 error: error.message,
+                timestamp: new Date().toISOString()
+            });
+        });
+
+        // Set a timeout of 10 seconds
+        req.setTimeout(10000, () => {
+            req.destroy();
+            reject({
+                success: false,
+                error: 'Request timed out after 10 seconds',
                 timestamp: new Date().toISOString()
             });
         });
